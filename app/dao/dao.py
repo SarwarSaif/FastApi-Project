@@ -7,7 +7,8 @@ import copy
 #from . import models, schemas
 from models.models import User, Parent
 from session import Base, get_dbSessionConn
-
+from lib.mylogger import MyLogger
+custom_logger = MyLogger(logger_name="DAO")
 
 class Dao:
 
@@ -38,6 +39,22 @@ class Dao:
     def count(self, T) -> int: #count()    
         with get_dbSessionConn(False) as session:
             return session.query(T).count()  #must use generic
+
+    def user_insert(self, t):
+        """ performs a bulk insert on a list of records 
+        
+        Arguments:
+            records {list} -- obj records in list of dicts format 
+        """
+        t2 = copy.deepcopy(t)
+        with get_dbSessionConn(True) as session:
+            session.add(t2)
+            session.commit()
+            session.refresh(t2)
+            custom_logger.debug("Dao t2-> {}".format(t2))
+            return t2
+        # with get_dbSessionConn(True) as session:
+        #     session.bulk_save_objects(records)
 
     # Python is not statically typed.
     # Python is dynamic so it does not need generics.
