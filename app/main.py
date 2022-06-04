@@ -42,7 +42,7 @@ app = FastAPI(   #app = FastAPI()
 # from config2 import get_settings2
 
 #using pydantic
-from config3 import get_settings
+from core.config3 import get_settings
 api_logger = MyLogger(logger_name="API")
 
 @app.get("/")

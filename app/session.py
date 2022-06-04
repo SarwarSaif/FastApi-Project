@@ -3,7 +3,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 #from app.core import config
-import config
+from core import config
 from contextlib import contextmanager
 #THIS MODULE SHOULD BE GLOBAL, just like CONFIG file
 
