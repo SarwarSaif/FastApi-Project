@@ -5,7 +5,7 @@ import typing as t
 import copy
 
 #from . import models, schemas
-from models import User, Parent
+from models.models import User, Parent
 from session import Base, get_dbSessionConn
 
 

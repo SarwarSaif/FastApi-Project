@@ -1,5 +1,5 @@
 from interceptors import HTTPWebInterceptor
-from models import ValidationModel
+from models.validate import ValidationModel
 from fastapi.exceptions import RequestValidationError
 from coreException import CoreException
 from fastapi import FastAPI

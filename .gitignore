@@ -105,3 +105,4 @@ venv.bak/
 
 # Skip logs
 *.log
+dao_playground.py

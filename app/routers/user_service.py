@@ -1,5 +1,5 @@
 from typing import List
-from models import User, UserModel
+from models.models import User, UserModel
 from dao import Dao
 from fastapi import APIRouter
 

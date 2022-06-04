@@ -1,5 +1,5 @@
-from app.models import User, Person
-from app.models import Parent, Child, ChildModel, ParentModel
+from app.models.models import User, Person
+from app.models.models import Parent, Child, ChildModel, ParentModel
 from datetime import datetime
 
 from app.dao import Dao

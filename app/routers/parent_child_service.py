@@ -1,5 +1,5 @@
 from typing import List
-from models import Parent, ParentModel
+from models.models import Parent, ParentModel
 from dao import Dao
 from fastapi import APIRouter
 

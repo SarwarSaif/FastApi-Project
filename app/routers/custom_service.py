@@ -1,6 +1,6 @@
 #DTO to contain list of entities, but pydantis can handle the conversion of the entities to pydantis models
 
-from models import CustomModel, Parent, User
+from models.models import CustomModel, Parent, User
 from dao import Dao
 from fastapi import APIRouter
 
