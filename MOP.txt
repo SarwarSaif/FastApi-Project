@@ -1,0 +1,40 @@
+#YUGABYTE
+#YugabyteDB is a high-performance, cloud-native distributed DB that aims to support all PostgreSQL features. It is best fit for cloud-native
+
+cd arch3/docker-yb
+docker-compose -f ./docker-yb/docker-compose.yaml up -d
+
+#YSQL API at localhost:5433 
+#YCQL API at localhost:9042. 
+#Admin Page at localhost:7000
+
+
+#The yb-master admin service at 
+curl http://localhost:7000
+
+#Connect to YSQL
+docker exec -it yb-tserver-n1 /home/yugabyte/bin/ysqlsh -h yb-tserver-n1
+\l    			  #list databases
+\c my_ygdb       #connect to the db my_ygdb
+\dt  			 #list tables in that db
+
+#------------------------------------
+#Install the python modules and packages in the virtaul env
+python3 -m venv venv
+source venv/bin/activate
+which python3
+pip3 install -r requirements.txt #psycopg2-binary sqlalchemy fastapi pydantic alembic etc
+
+#------------------------------------
+#DEPLOY APP
+python3 main.py
+
+
+curl http://localhost:8000/
+curl http://localhost:8000/validation
+
+curl http://localhost:8000/parents
+curl http://localhost:8000/custom
+
+To check API
+http://127.0.0.1:8000/docs
