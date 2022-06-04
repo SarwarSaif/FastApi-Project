@@ -22,9 +22,9 @@ db_user = User(
 
 parent = Parent(
             #id
-            email="mamadu.bah10@rakuten.com",
-            first_name="mamadu10",
-            last_name="Bah",
+            email="me@gmail.com",
+            first_name="Me",
+            last_name="You",
             is_active=True,
             is_superuser=True,
             hashed_password="password"
