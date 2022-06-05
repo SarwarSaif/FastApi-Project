@@ -3,7 +3,8 @@ from coreException import CoreException
 from sqlalchemy.orm import Session
 import typing as t
 import copy
-
+from models.schemas import user
+from datetime import datetime
 #from . import models, schemas
 from models.models import User, Parent
 from session import Base, get_dbSessionConn
@@ -39,6 +40,20 @@ class Dao:
     def count(self, T) -> int: #count()    
         with get_dbSessionConn(False) as session:
             return session.query(T).count()  #must use generic
+    
+    
+    def create_user(db: Session, user: user.UserModel):
+        # fake_hashed_password = user.password + "notreallyhashed"
+        db_user = User(
+            name=user.name,
+            is_active=True,
+            date=datetime.now() #datetime.utcnow
+            #hashed_password=hashed_password,
+        )
+        db.add(db_user)
+        db.commit()
+        db.refresh(db_user)
+        return db_user
 
     def user_insert(self, t):
         """ performs a bulk insert on a list of records 
@@ -48,10 +63,15 @@ class Dao:
         """
         t2 = copy.deepcopy(t)
         with get_dbSessionConn(True) as session:
-            session.add(t2)
-            session.commit()
-            session.refresh(t2)
-            custom_logger.debug("Dao t2-> {}".format(t2))
+            try:
+
+                session.add(t2)
+                session.commit()
+                session.refresh(t2)
+                custom_logger.debug("Dao t2-> {}".format(t2))
+                
+            except Exception as err:
+                custom_logger.error(err)
             return t2
         # with get_dbSessionConn(True) as session:
         #     session.bulk_save_objects(records)
