@@ -1,3 +1,4 @@
+from requests import session
 from error_code import ErrorCode
 from coreException import CoreException
 from sqlalchemy.orm import Session
@@ -44,15 +45,20 @@ class Dao:
     
     def create_user(db: Session, user: user.UserModel):
         # fake_hashed_password = user.password + "notreallyhashed"
-        db_user = User(
-            name=user.name,
-            is_active=True,
-            date=datetime.now() #datetime.utcnow
-            #hashed_password=hashed_password,
-        )
-        db.add(db_user)
-        db.commit()
-        db.refresh(db_user)
+        try:
+            db_user = User(
+                name=user.name,
+                is_active=True,
+                date=datetime.now() #datetime.utcnow
+                #hashed_password=hashed_password,
+            )
+
+            db.add(db_user)
+            db.commit()
+            db.refresh(db_user)
+            custom_logger.info(db_user)
+        except Exception as err:
+            custom_logger.error(err)
         return db_user
 
     def user_insert(self, t):

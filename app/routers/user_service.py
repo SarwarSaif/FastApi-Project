@@ -1,41 +1,38 @@
 from typing import List
-# from app.models.schemas import user
 from models.models import User
-# from models.schemas.user import UserModel
 from models.schemas import user
-from dao.dao import Dao
 from fastapi import APIRouter
-
 from dao.user import userDao
-
 from lib.mylogger import MyLogger
-custom_logger = MyLogger(logger_name="ROUTER")
-
+custom_logger = MyLogger(logger_name="USER_ROUTER")
 from fastapi import Depends
 from sqlalchemy.orm import Session
-from models.database import SessionLocal
-# Dependency
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
+from .dependecies.database import DbConn 
 
 user_router = APIRouter()
 
-@user_router.get("/users", response_model=List[user.UserModel])
-async def get_users():
-    return Dao().find_all(User)
+from fastapi.security import OAuth2PasswordBearer
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-@user_router.post("/create/user", response_model=user.CreateUserModel)
-async def create_user(user: user.UserModel, db: Session = Depends(get_db)):
+
+@user_router.get("/token")
+async def read_items(token: str = Depends(oauth2_scheme)):
+    return {"token": token}
+
+@user_router.get("/users", response_model=List[user.UserOut])
+async def get_users(db: Session = Depends(DbConn.get_db)):
+    return userDao.get_all_user(db, User)
+
+## SQLAlchemy does not work on Async on current implementation
+@user_router.post("/create/user", response_model=user.UserOut)
+def create_user(user: user.UserModel, db: Session = Depends(DbConn.get_db)):
     custom_logger.info(user)
+    custom_logger.info(db)
+    # Check if the name already exists
+    res = userDao.find_by_name(db, user.name)
+    if res:
+        custom_logger.warning("Already exists")
+        return res
+    else:
+        return userDao.create_user(db, user)
     
-    try:
-        t2 = Dao.create_user(db, user)
-        custom_logger.debug("Service t2-> {}".format(t2))
-    except Exception as err:
-        custom_logger.error(err)
-    return t2
