@@ -18,6 +18,18 @@ docker exec -it yb-tserver-n1 /home/yugabyte/bin/ysqlsh -h yb-tserver-n1
 \c my_ygdb       #connect to the db my_ygdb
 \dt  			 #list tables in that db
 
+### Connect using VSCODE
+{
+  "label": "my_ygdb",
+  "host": "localhost",
+  "user": "yugabyte",
+  "port": 5433,
+  "ssl": false,
+  "database": "my_ygdb",
+  "password": "yugabyte"
+}
+
+
 #------------------------------------
 #Install the python modules and packages in the virtaul env
 python3 -m venv venv

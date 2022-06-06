@@ -25,4 +25,6 @@ INSERT INTO child (parent_id, child_name, "date")
 	VALUES (2, 'parent2_child2', CURRENT_TIMESTAMP);
 	
 INSERT INTO child (parent_id, child_name, "date") 
-	VALUES (3, 'parent3_child1', CURRENT_TIMESTAMP)	
+	VALUES (3, 'parent3_child1', CURRENT_TIMESTAMP);	
+
+DROP TABLE user;

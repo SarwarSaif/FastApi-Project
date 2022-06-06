@@ -1,8 +1,9 @@
 from typing import List
 from models.models import User
-from models.schemas import user
+from models.schemas import user, auth_user
 from fastapi import APIRouter
 from dao.user import userDao
+from dao.auth_user import AuthUserDao
 from lib.mylogger import MyLogger
 custom_logger = MyLogger(logger_name="USER_ROUTER")
 from fastapi import Depends
@@ -36,3 +37,14 @@ def create_user(user: user.UserModel, db: Session = Depends(DbConn.get_db)):
     else:
         return userDao.create_user(db, user)
     
+@user_router.post("/create/auth_user", response_model=user.UserOut)
+def create_user(user: auth_user.AuthUserModelIn, db: Session = Depends(DbConn.get_db)):
+    custom_logger.info(user)
+    custom_logger.info(db)
+    # Check if the name already exists
+    res = userDao.find_by_name(db, user.name)
+    if res:
+        custom_logger.warning("Already exists")
+        return res
+    else:
+        return AuthUserDao.create_auth_user(db, user)

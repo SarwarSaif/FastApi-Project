@@ -34,8 +34,8 @@ class User(Base):
             "is_active": self.is_active,
             "date": self.date
             #"product": self.product.to_json()
-        }
-            
+        } 
+
     
 # class UserModel(BaseModel):
 #     id: int
