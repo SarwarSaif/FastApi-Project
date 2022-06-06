@@ -37,14 +37,18 @@ def create_user(user: user.UserModel, db: Session = Depends(DbConn.get_db)):
     else:
         return userDao.create_user(db, user)
     
-@user_router.post("/create/auth_user", response_model=user.UserOut)
+@user_router.post("/create/auth_user", response_model=auth_user.AuthUserInDB)
 def create_user(user: auth_user.AuthUserModelIn, db: Session = Depends(DbConn.get_db)):
     custom_logger.info(user)
     custom_logger.info(db)
     # Check if the name already exists
-    res = userDao.find_by_name(db, user.name)
+    # res = AuthUserDao.find_by_username(db, user.username)
+    
+    res=False
     if res:
         custom_logger.warning("Already exists")
         return res
     else:
-        return AuthUserDao.create_auth_user(db, user)
+        temp = AuthUserDao.create_auth_user(db, user)
+        custom_logger.debug(temp)
+        return temp

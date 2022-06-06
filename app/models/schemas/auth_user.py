@@ -37,16 +37,19 @@ class AuthUserModelIn(BaseModel):
             raise ValueError('passwords do not match')
         return values
 
+class AuthUserInDB(BaseModel):
+    username=str
+    email=EmailStr
+    hashed_password=str # Need to validate if it got hashed or not
+    first_name=str
+    last_name=str
+    is_active=bool
+    is_superuser=bool
+    date=datetime
+    # date: Union[datetime, None] = None
+    custom_logger.info("AuthUserInDB model got executed...")
+    
+    class Config:
+        orm_mode = True
 
-
-from fastapi.security import OAuth2PasswordBearer
-from fastapi import Depends
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")    
-def fake_decode_token(token):
-    return User(
-        username=token + "fakedecoded", email="john@example.com", full_name="John Doe"
-    )
-
-async def get_current_user(token: str = Depends(oauth2_scheme)):
-    user = fake_decode_token(token)
-    return user
+        
