@@ -1,14 +1,14 @@
 from requests import session
-from error_code import ErrorCode
-from coreException import CoreException
+from exception_mappers.error_code import ErrorCode
+from exception_mappers.coreException import CoreException
 from sqlalchemy.orm import Session
 import typing as t
 import copy
-from models.schemas import user
+from models import user
 from datetime import datetime
 #from . import models, schemas
-from models.models import User, Parent
-from session import Base, get_dbSessionConn
+from entities.models import User, Parent
+from common.session import Base, get_dbSessionConn
 from lib.mylogger import MyLogger
 custom_logger = MyLogger(logger_name="DAO")
 

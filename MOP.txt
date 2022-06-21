@@ -15,6 +15,7 @@ curl http://localhost:7000
 #Connect to YSQL
 docker exec -it yb-tserver-n1 /home/yugabyte/bin/ysqlsh -h yb-tserver-n1
 \l    			  #list databases
+create database my_ygdb WITH ENCODING='UTF8'; # Create database
 \c my_ygdb       #connect to the db my_ygdb
 \dt  			 #list tables in that db
 
@@ -39,7 +40,7 @@ pip3 install -r requirements.txt #psycopg2-binary sqlalchemy fastapi pydantic al
 
 #------------------------------------
 #DEPLOY APP
-python3 main.py
+python3 app/main.py
 
 
 curl http://localhost:8000/

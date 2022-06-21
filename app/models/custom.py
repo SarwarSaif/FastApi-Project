@@ -1,8 +1,8 @@
 from pydantic import BaseModel, HttpUrl, Field, EmailStr, validator, root_validator
 from typing import List, Optional
 from datetime import datetime
-from .user import UserModel
-from .parent import ParentModel
+from models.user import UserModel
+from models.parent import ParentModel
 
 class CustomModel(BaseModel):
     name: str

@@ -1,6 +1,6 @@
 from typing import List
-from models.models import User
-from models.schemas import user, auth_user
+from entities.models import User
+from models import user, auth_user
 from fastapi import APIRouter
 from dao.user import userDao
 from dao.auth_user import AuthUserDao

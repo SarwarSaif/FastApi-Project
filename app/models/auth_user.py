@@ -1,34 +1,55 @@
-from sqlalchemy import Boolean, Column, Integer, String, DateTime
-from .database import Base
+import email
+from pydantic import BaseModel, HttpUrl, Field, EmailStr, validator, root_validator
+from typing import List, Optional, Union
+from datetime import date, datetime
+from lib.mylogger import MyLogger
+custom_logger = MyLogger(logger_name="SCHEMA")
+from models.domain.user import User
 
-### Add Authenticated User Model            
-class AuthUser(Base):
-    __tablename__ = "auth_user"
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    username = Column(String, nullable=False)
-    email = Column(String, unique=True, index=True, nullable=False)
-    hashed_password = Column(String, nullable=False)
-    first_name = Column(String)
-    last_name = Column(String(50))
-    is_active = Column(Boolean, default=True)
-    is_superuser = Column(Boolean, default=False)
-    date = Column(DateTime)
+##### Authenticated User #######
+class AuthUserModelIn(BaseModel):
+    # id: int
+    username: str
+    email_address:EmailStr #EmailStr Type object
+    email_address_confirm:str #will use custom validators below
+    password1:str #will use custom validators below
+    password2:str #will use custom validators below
+    first_name: str
+    last_name: str
+    is_active: bool
+    # is_superuser: bool
+    # date: Union[datetime, None] = None
+    #custom validators
+    @validator('email_address_confirm')
+    def email_address_match(cls, val, values, **kwargs): 
+        if 'email_address' in values and val != values['email_address']:
+            custom_logger.warning('email addresses do not match')
+            raise ValueError('email addresses do not match')
+        return val
+    @root_validator #Validation can also be performed on the entire model's data using @root_validator 
+    def check_passwords_match(cls, values):
+        # validation_logger.info(cls, values.get('password1'), values.get('password2'))
+        assert 'password1' in values or 'password2' in values, 'passwords must be provided'
+        
+        pw1, pw2 = values.get('password1'), values.get('password2')
+        if pw1 is not None and pw2 is not None and pw1 != pw2:
+            custom_logger.warning('passwords do not match')
+            raise ValueError('passwords do not match')
+        return values
+
+class AuthUserInDB(BaseModel):
+    username=str
+    email=EmailStr
+    hashed_password=str # Need to validate if it got hashed or not
+    first_name=str
+    last_name=str
+    is_active=bool
+    is_superuser=bool
+    date=datetime
+    # date: Union[datetime, None] = None
+    custom_logger.info("AuthUserInDB model got executed...")
     
-    def __repr__(self):
-        return "<User(id=%s username=%s, email=%s, hashed_password=%s, first_name=%s, lastname=%s, is_active=%s, is_superuser=%s, date=%s)>" % (self.id, self.username, self.email, self.hashed_password, self.first_name, self.last_name, self.is_active, self.is_superuser, self.date)
+    class Config:
+        orm_mode = True
 
-    def to_json(self):
-        return {
-            "id": self.id,
-            "username": self.username,
-            "email": self.email,
-            "hashed_password": self.hashed_password,
-            "first_name": self.first_name,
-            "last_name": self.last_name,
-            "is_active": self.is_active,
-            "is_superuser": self.is_superuser,
-            "date": self.date
-        }
-            
-
-    
+        

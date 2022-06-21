@@ -1,4 +1,4 @@
-from error_code import ErrorCode
+from exception_mappers.error_code import ErrorCode
 
 
 class CoreException(Exception):

@@ -7,7 +7,7 @@ from sqlalchemy.orm import relationship, with_polymorphic
 from sqlalchemy.ext.declarative import declared_attr
 
 #from .session import Base
-from session import Base, get_dbSessionConn
+from common.session import Base, get_dbSessionConn
 
 
 from typing import List, Optional

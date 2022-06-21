@@ -3,7 +3,7 @@ from datetime import datetime
 from sqlalchemy.ext.declarative import declared_attr
 
 #from .session import Base
-from session import Base
+from common.session import Base
 
 
 from typing import List, Optional

@@ -1,7 +1,7 @@
-from interceptors import HTTPWebInterceptor
+from exception_mappers.interceptors import HTTPWebInterceptor
 from models.validate import ValidationModel
 from fastapi.exceptions import RequestValidationError
-from coreException import CoreException
+from exception_mappers.coreException import CoreException
 from fastapi import FastAPI
 import uvicorn
 
@@ -42,7 +42,7 @@ app = FastAPI(   #app = FastAPI()
 # from config2 import get_settings2
 
 #using pydantic
-from core.config3 import get_settings
+from common.config3 import get_settings
 api_logger = MyLogger(logger_name="API")
 
 @app.get("/")
@@ -109,7 +109,7 @@ app.include_router(custom_service_router)
 
 #Exception Handlers
 from starlette.exceptions import HTTPException as StarletteHTTPException
-from generic_http_handler import core_exception_handler, generic_exception_handler, generic_http_exception_handler, request_validation_exception_handler
+from exception_mappers.generic_http_handler import core_exception_handler, generic_exception_handler, generic_http_exception_handler, request_validation_exception_handler
 app.add_exception_handler(StarletteHTTPException, generic_http_exception_handler)
 app.add_exception_handler(RequestValidationError, request_validation_exception_handler)
 app.add_exception_handler(CoreException, core_exception_handler)

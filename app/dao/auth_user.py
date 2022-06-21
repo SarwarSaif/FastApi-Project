@@ -1,13 +1,14 @@
+import models
 from lib.mylogger import MyLogger
 custom_logger = MyLogger(logger_name="DAO")
 from sqlalchemy.orm import Session
-from session import Base, get_dbSessionConn
-from models.models import User
+from common.session import Base, get_dbSessionConn
+from entities.models import User
 from .dao import Dao
 from datetime import datetime
-from models import schemas
-from models.auth_user import AuthUser
-from core.hasher import Hasher
+import models 
+from entities.auth_user import AuthUser
+from lib.hasher import Hasher
 
 import bcrypt
 class AuthUserDao:
@@ -16,7 +17,7 @@ class AuthUserDao:
         return db.query(AuthUser).filter(AuthUser.username == name).first()
     # Before creating a new user check if username already exits
 
-    def create_auth_user(db: Session, user: schemas.auth_user.AuthUserModelIn):
+    def create_auth_user(db: Session, user: models.auth_user.AuthUserModelIn):
         # fake_hashed_password = user.password + "notreallyhashed"
         custom_logger.info(user.password1)
         hasherObj = Hasher()
@@ -38,7 +39,7 @@ class AuthUserDao:
         # db.refresh(db_user)
         return db_user
 
-    def get_all_user(db: Session, table: schemas.user.UserModel):
+    def get_all_user(db: Session, table: models.user.UserModel):
         return db.query(table).all()
 
     
